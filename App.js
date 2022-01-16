@@ -1,6 +1,6 @@
 import { Keyboard, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native-web';
 import React, {useState} from 'react';
-import { StatusBar, setStatusBarBackgroundColor } from 'expo-status-bar';
+import { StatusBar,  } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
 import Todos from './components/Todos'
