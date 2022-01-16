@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "todo",
+    "name": "Bentil TODO",
     "slug": "todo",
-    "description": "A simple task tracker app",
+    "description": "A simple task tracker app. Project 0 from CS50M",
     "owner": "qbentil",
     "primaryColor": "#f00",
     "version": "1.0.0",
