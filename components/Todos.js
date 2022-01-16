@@ -11,7 +11,7 @@ const Todos = (props) => {
             
             <View style={styles.todoItemLeft}>
                 <View style = {styles.square}></View>
-                <Text style={styles.text}>Todo Text here please</Text>
+                <Text style={styles.text}>this.props.text</Text>
             </View>        
             <View style={styles.todoItemRight}>
                 <TouchableOpacity style = {styles.circular}></TouchableOpacity>
