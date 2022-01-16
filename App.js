@@ -1,105 +1,184 @@
-import { Keyboard, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native-web';
+import { Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, {useState} from 'react';
-import { StatusBar,  } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 
-import Todos from './components/Todos'
+import Todos from './components/Todos';
 
-export default function App() {
-  const [task, setstate] = useState();
-  const [taskItems, setstate] = useState([]);
+let id = 0;
 
-  const addTodo = () => {
-    Keyboard.dismiss(),
-    setTaskItems({...taskItems, task})
-    setTask(null);
+export default class App extends React.Component{
+  constructor()
+  {
+    super();
+    this.state = {
+      text: "",
+      todos: [],
+    };
   }
+   // add TODO
+   addTodo()
+   {
+     Keyboard.dismiss();
+     id++;
+     if(this.state.text !== "")
+     {
+       this.setState({
+         todos: [
+           ...this.state.todos, { id: id++, text: this.state.text, checked: false }
+         ]
+       });
 
-  const deleteTodo = (index) => {
-    let todoCopy = [...taskItems];
-    todoCopy.splice(index, 1);
-    setTaskItems(todoCopy);
-  }
+       // Empty the input
+       this.setState({
+         text: ""
+       })
+     }
+   }
+
+   // remove TODO
+   removeTodo(id){
+     this.setState({
+       todos: this.state.todos.filter(todo => todo.id !== id)
+     });
+   }
+   // Handle checked todo
+   toggleTodoState(id)
+   {
+     this.setState({
+       todos: this.state.todos.map(todo => {
+         if (todo.id !== id) return todo;
+         return {
+           id: todo.id,
+           text: todo.text,
+           checked: !todo.checked,
+         };
+       })
+     })
+   }
+
+  render(){
+    return (
+      <View style={styles.container}>
+        {/* Added this scroll view to enable scrolling when list gets longer than the page */}
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1
+          }}
+          keyboardShouldPersistTaps='handled'
+        >
   
-  return (
-    <View style={styles.container}>
-      <View style = {styles.wrapper}>
-        <Text style = {styles.title}>Today's tasks</Text>
-      </View>
-
-      <View style = {styles.listItems}>
-        {
-          taskItems.map((item, index) => {
-            return (
-              <TouchableOpacity key = {index} onPress = {() => deleteTodo(index)}>
-                <Todos text = {item} />
-              </TouchableOpacity>
-            )
-          })
-        }
-      </View>
-
-      {/* Write a task */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.writeTaskWrapper}
-      >
-        <TextInput style = {styles.input} placeholder = "Write a task..." value = {task} onChangeText = {(text) => setTask(text)} />
-        <TouchableOpacity onPress = {this.addTodo}>
-          <View style = {styles.buttonWrapper}>
-            <Text style = {styles.addText}>+</Text>
+        {/* Today's Tasks */}
+        <View style={styles.tasksWrapper}>
+          <Text style={styles.sectionTitle}>Today's tasks</Text>
+          <View style = {styles.HeaderContainer}>
+            <View style={styles.counters}>
+               <Text>Total Tasks:</Text>
+              <Text style = {styles.count}>{this.state.todos.length}</Text>
+            </View>
+            <View style={styles.counters}>
+               <Text>Pending Tasks:</Text>
+              <Text style = {styles.count}>{this.state.todos.filter(todo => !todo.checked).length}</Text>
+            </View>
           </View>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </View>
-  );
+          <View style={styles.items}>
+            {/* This is where the tasks will go! */}
+            {this.state.todos.map( todo => (
+               <Todos
+                todo = {todo}
+                onDelete = {() => this.removeTodo(todo.id)} 
+                onToggle = {() => this.toggleTodoState(todo.id)}
+                key = {todo.id} 
+               />
+            ))}
+          </View>
+        </View>
+          
+        </ScrollView>
+  
+        {/* Write a task */}
+        {/* Uses a keyboard avoiding view which ensures the keyboard does not cover the items on screen */}
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.writeTaskWrapper}
+        >
+          <TextInput style={styles.input} 
+              placeholder="Enter today's task"
+              value = {this.state.text}
+              onChangeText={(text) => this.setState({text})} 
+          />
+          <TouchableOpacity onPress={() => this.addTodo()}>
+            <View style={styles.addWrapper}>
+              <Text style={styles.addText}>+</Text>
+            </View>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+        
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e8eaed',
+    backgroundColor: '#1a237e',
   },
-  wrapper: {
+  tasksWrapper: {
     paddingTop: 80,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
-  title: {
+  sectionTitle: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
+    color: "#fff",
   },
-  listItems: {
-    marginTop: 20,
-    paddingHorizontal: 5,
+  items: {
+    marginTop: 30,
   },
   writeTaskWrapper: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 60,
     width: '100%',
-    justifyContent: "space-around",
-    alignItems: "center"
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center'
   },
-  input:{
+  input: {
     paddingVertical: 15,
-    width: 250,
     paddingHorizontal: 15,
-    backgroundColor: "#fff",
+    backgroundColor: '#FFF',
     borderRadius: 60,
-    borderColor: "#C0C0C0",
+    borderColor: '#55bcf6',
     borderWidth: 1,
+    width: 250,
   },
-  buttonWrapper: {
+  addWrapper: {
     width: 60,
     height: 60,
-    borderRadius: 50,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "#C0C0C0",
+    backgroundColor: '#FFF',
+    borderRadius: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#55bcf6',
     borderWidth: 1,
-    
   },
-  addText: {
-    
+  addText: {},
+  HeaderContainer: {
+    flexDirection: 'row', 
+    justifyContent: "space-around",
+    paddingVertical: 15,
+    paddingHorizontal:10,
+    marginVertical: 20,
+    borderRadius: 20,
+    backgroundColor: "#fff"
+  },
+  counters: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  count: {
+    fontWeight: "bold",
+    marginHorizontal: 5,
+    color: "#1a237e",
+
   },
 });
