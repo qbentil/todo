@@ -8,3 +8,9 @@ This time, enhancing it with a Beautiful UI😍
 2. Creating beautiful UI
 3. Passing Props
 4. Managing States
+
+## CHECK OUT 
+This app has been published on Expo Dev. Check it below👇🏿👇🏿
+📝  Manifest: https://exp.host/@qbentil/todo/index.exp?sdkVersion=44.0.0 
+⚙️   Project page: https://expo.dev/@qbentil/todo 
+
