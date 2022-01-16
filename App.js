@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native-web';
+import { Keyboard, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native-web';
 import React, {useState} from 'react';
 import { StatusBar, setStatusBarBackgroundColor } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
@@ -7,9 +7,18 @@ import Todos from './components/Todos'
 
 export default function App() {
   const [task, setstate] = useState();
+  const [taskItems, setstate] = useState([]);
 
   const addTodo = () => {
-    console.log(task);
+    Keyboard.dismiss(),
+    setTaskItems({...taskItems, task})
+    setTask(null);
+  }
+
+  const deleteTodo = (index) => {
+    let todoCopy = [...taskItems];
+    todoCopy.splice(index, 1);
+    setTaskItems(todoCopy);
   }
   
   return (
@@ -19,7 +28,15 @@ export default function App() {
       </View>
 
       <View style = {styles.listItems}>
-        <Todos />
+        {
+          taskItems.map((item, index) => {
+            return (
+              <TouchableOpacity key = {index} onPress = {() => deleteTodo(index)}>
+                <Todos text = {item} />
+              </TouchableOpacity>
+            )
+          })
+        }
       </View>
 
       {/* Write a task */}
@@ -28,7 +45,7 @@ export default function App() {
         style={styles.writeTaskWrapper}
       >
         <TextInput style = {styles.input} placeholder = "Write a task..." value = {task} onChangeText = {(text) => setTask(text)} />
-        <TouchableOpacity onClick = {this.addTodo}>
+        <TouchableOpacity onPress = {this.addTodo}>
           <View style = {styles.buttonWrapper}>
             <Text style = {styles.addText}>+</Text>
           </View>
@@ -69,7 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 60,
     borderColor: "#C0C0C0",
-    borderWidth: 2,
+    borderWidth: 1,
   },
   buttonWrapper: {
     width: 60,
@@ -79,7 +96,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderColor: "#C0C0C0",
-    borderWidth: 2,
+    borderWidth: 1,
     
   },
   addText: {
