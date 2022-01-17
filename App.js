@@ -147,9 +147,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: '#FFF',
     borderRadius: 60,
-    borderColor: '#55bcf6',
+    borderColor: '#1a237e',
     borderWidth: 1,
-    width: 250,
+    width: 300,
+    height: 60,
   },
   addWrapper: {
     width: 60,
@@ -158,18 +159,23 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: '#55bcf6',
+    borderColor: '#1a237e',
     borderWidth: 1,
   },
-  addText: {},
+  addText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: "#1a237e",
+  },
   HeaderContainer: {
     flexDirection: 'row', 
     justifyContent: "space-around",
     paddingVertical: 15,
     paddingHorizontal:10,
     marginVertical: 20,
-    borderRadius: 20,
-    backgroundColor: "#fff"
+    borderRadius: 50,
+    backgroundColor: "#fff",
+    height: 60,
   },
   counters: {
     flexDirection: "row",
@@ -179,6 +185,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginHorizontal: 5,
     color: "#1a237e",
-
   },
 });
