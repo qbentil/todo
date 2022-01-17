@@ -71,11 +71,11 @@ export default class App extends React.Component{
           <Text style={styles.sectionTitle}>Today's tasks</Text>
           <View style = {styles.HeaderContainer}>
             <View style={styles.counters}>
-               <Text>Total Tasks:</Text>
+               <Text style = {{fontSize: 15}}>Total Tasks:</Text>
               <Text style = {styles.count}>{this.state.todos.length}</Text>
             </View>
             <View style={styles.counters}>
-               <Text>Pending Tasks:</Text>
+               <Text style = {{fontSize: 15}}>Pending Tasks:</Text>
               <Text style = {styles.count}>{this.state.todos.filter(todo => !todo.checked).length}</Text>
             </View>
           </View>
@@ -179,11 +179,12 @@ const styles = StyleSheet.create({
   },
   counters: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   count: {
     fontWeight: "bold",
     marginHorizontal: 5,
     color: "#1a237e",
+    fontSize: 15
   },
 });
